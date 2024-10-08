@@ -1,0 +1,10 @@
+{
+  "author": {
+    "authorId": 0,
+    "firstName": "{{FIRST_NAME}}",
+    "language": "{{LANGUAGE}}",
+    "lastName": "{{LAST_NAME}}"
+  },
+  "bookId": 0,
+  "title": "{{TITLE}}"
+}

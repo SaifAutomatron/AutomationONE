@@ -1,0 +1,14 @@
+{
+    "Sauce_Demo_Order_Item":
+      {
+        "UserName":"standard_user",
+        "Password":"secret_sauce",
+        "Item":"Sauce Labs Bike Light",
+        "firstName":"Pandu",
+        "lastName":"Shoob",
+        "Expected Text":"THANK YOU FOR YOUR ORDER"
+       }
+      
+      
+    
+}

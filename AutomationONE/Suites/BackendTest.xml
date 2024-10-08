@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="ApiSampleTest">
+
+	<listeners>
+		<listener class-name="Utilities.Listener.ExtentListener"></listener>
+	</listeners>
+ 
+ 
+	
+<!-- 	 <test name="GET_USERS" enabled="true">
+		<classes>
+			<class name="V1.ApiTest">
+				<methods>
+					<include name="getUsers" />
+				</methods>
+			</class>
+		</classes>
+	</test> 
+	<test name="SAVE_USER" enabled="true">
+		<classes>
+			<class name="V1.ApiTest">
+				<methods>
+					<include name="saveUser" />
+				</methods>
+			</class>
+		</classes>
+	</test> -->
+	
+	<test name="GET_COUCHBASE_DOCUMENT" enabled="true">
+		<classes>
+			<class name="V1.ApiTest">
+				<methods>
+					<include name="getCouchBaseDocument" />
+				</methods>
+			</class>
+		</classes>
+	</test>
+	
+	
+	
+	
+</suite> 

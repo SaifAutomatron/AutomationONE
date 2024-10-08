@@ -1,0 +1,26 @@
+{
+    "TestData1":
+      {
+         "1":"  JSONFILE_NAME   =createsubRTV.json",
+         "2":"PRODUCT_TYPE=RTV",
+         "3":"NETWORK_TYPE=O",
+         "4":"TELCO_ID=BRSO"
+      
+      },
+     "TestData2":
+      {
+         "1":"JSONFILE_NAME=createsubBIT.json",
+         "2":"PRODUCT_TYPE              =BIT  ",
+         "3":"NETWORK_TYPE=H"
+      },
+     "TestData3":
+      {
+         "1":"JSONFILE_NAME=createsubHPN.json",
+         "2":"PRODUCT_TYPE=HPN"
+      },
+      "TestData55":
+      {
+         
+      }
+    
+}

@@ -1,0 +1,11 @@
+{
+"Subscriber":
+{
+ "ProductType":"{{PRODUCT_TYPE}}",
+"NetworkType":"{{Network_TYPE}}",
+"TelcoID":"{{TELCO_ID}}",
+"DeviceType":"{{DEVICE_TYPE}}"
+}
+}
+
+
