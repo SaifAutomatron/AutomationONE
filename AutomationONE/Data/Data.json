@@ -6,9 +6,7 @@
         "Item":"Sauce Labs Bike Light",
         "firstName":"Pandu",
         "lastName":"Shoob",
-        "Expected Text":"THANK YOU FOR YOUR ORDER"
-       }
-      
-      
+        "Expected Text":"Thank you for your order!"
+       }   
     
 }

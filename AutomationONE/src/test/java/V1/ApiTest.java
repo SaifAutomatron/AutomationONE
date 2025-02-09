@@ -10,6 +10,7 @@ import org.testng.asserts.SoftAssert;
 import Utilities.Common.JavaUtilities;
 import Utilities.Database.CouchBase;
 import Utilities.Excel.EnvironmentData;
+import Utilities.Excel.ReferData;
 import Utilities.Excel.TestData;
 import Utilities.Listener.LoginExtent;
 import Utilities.Unix.UnixUtils;
@@ -25,6 +26,8 @@ public class ApiTest extends BaseClass {
 	HashMap<String, String> testDataMap=null;
 	LoginExtent logExtent=new LoginExtent();
 	SoftAssert sa=new SoftAssert();
+	HashMap<String, String> saveMap= new HashMap<String, String>();
+	
 
 	@BeforeTest
 	@SneakyThrows
@@ -35,6 +38,11 @@ public class ApiTest extends BaseClass {
 		testDataMap = TestData.getInstance().getTestDataMap();
 		EnvironmentData.getInstance().fetchEnvironmentData();
 		envMap = EnvironmentData.getInstance().getEnvironmentDataMap();
+		ReferData.getInstance().fetchReferData();
+		HashMap<String, String> map = ReferData.getInstance().getReferDataMap();
+		System.out.println("REFER DATA MAP---------->\n"+map);
+		
+		
 	}
 
 	@Test(priority = 1)
@@ -71,6 +79,7 @@ public class ApiTest extends BaseClass {
 		logExtent.logJSONResults(strBody, response.asString());
 		
 		JsonPath jp =new JsonPath(response.asString());
+		saveMap.put("Test", "save");
 
 		sa.assertAll();                     
 

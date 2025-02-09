@@ -6,68 +6,63 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.testng.SkipException;
 import com.google.gson.Gson;
-
 import Utilities.Excel.EnvironmentData;
 import lombok.SneakyThrows;
+
 /**
+ * Utility class to fetch test data from a JSON file.
  * 
  * @author Saif
- *
  */
 public class TestDataJson {
 
-	static TestDataJson r;
-	HashMap<String, String> testDataMap=new HashMap<>();
+    private static TestDataJson instance;
+    private final HashMap<String, String> testDataMap = new HashMap<>();
 
-	private TestDataJson()
-	{
-	}
+    private TestDataJson() {
+    }
 
-	public static synchronized TestDataJson getInstance()
-	{
+    public static synchronized TestDataJson getInstance() {
+        if (instance == null) {
+            instance = new TestDataJson();
+        }
+        return instance;
+    }
 
-		if(r==null)
-		{
-			r=new TestDataJson();
-		}
+    @SuppressWarnings("unchecked")
+    @SneakyThrows
+    public HashMap<String, String> getTestDataMap(String testName) {
+        testDataMap.clear();
 
-		return r;
-	}
+        // Get the file path for the JSON data file
+        String filePath = EnvironmentData.getInstance().environmentDataMap.get("DATASHEETPATH") + "/"
+                + EnvironmentData.getInstance().environmentDataMap.get("JSON_DATASHEET_NAME") + ".json";
 
-	
+        // Parse the JSON file
+        JSONParser jsonParser = new JSONParser();
+        FileReader reader = new FileReader(filePath);
+        Object obj = jsonParser.parse(reader);
+        JSONObject jsonObject = (JSONObject) obj;
+        JSONObject testObj = (JSONObject) jsonObject.get(testName);
+        reader.close();
 
-	@SuppressWarnings("unchecked")
-	@SneakyThrows
-	public HashMap<String,String> getTestDataMap(String testname)
-	{    
-		testDataMap.clear();
-		String filePath=EnvironmentData.getInstance().environmentDataMap.get("DATASHEETPATH")+"/"+EnvironmentData.getInstance().environmentDataMap.get("JSON_DATASHEET_NAME")+".json";
-		JSONParser jsonParser=new JSONParser();
-		FileReader reader=new FileReader(filePath);
-		Object obj = jsonParser.parse(reader);
-		JSONObject jobj=((JSONObject) obj);
-		JSONObject testObj = (JSONObject) jobj.get(testname);
-		reader.close();
-		try {
-		HashMap<String,String> testObjMap = new Gson().fromJson(testObj.toString(),HashMap.class);
+        try {
+            // Convert JSON object to HashMap using Gson
+            HashMap<String, String> testObjMap = new Gson().fromJson(testObj.toString(), HashMap.class);
 
-				testDataMap.put("TEST_NAME", testname);
-				
-				for(  String k:testObjMap.keySet())
-				{
-					testDataMap.put(k.trim(), testObjMap.get(k).trim());
-				}
-				
-		}
-		catch (Exception e) {
-			String msg="Test Data for test name "+testname+" not found in Data.json";
-			System.err.println(msg);
-			throw new SkipException(msg);
-		}
+            // Add test name to the map
+            testDataMap.put("TEST_NAME", testName);
 
-		return testDataMap;
+            // Add all key-value pairs to the test data map
+            for (String key : testObjMap.keySet()) {
+                testDataMap.put(key.trim(), testObjMap.get(key).trim());
+            }
+        } catch (Exception e) {
+            String msg = "Test Data for test name " + testName + " not found in the Data.json file.";
+            System.err.println(msg);
+            throw new SkipException(msg);
+        }
 
-	}
-
-
+        return testDataMap;
+    }
 }

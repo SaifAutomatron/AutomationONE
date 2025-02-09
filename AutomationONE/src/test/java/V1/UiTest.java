@@ -67,7 +67,7 @@ public class UiTest  extends BaseClass{
 		
 		
 		if (cartPage.confirmOrder(testDataMap.get("firstName"),testDataMap.get("lastName"), ""+JavaUtilities.getRandomNumber()))
-			logextent.reportUIResultRobot("PASS", "order confirmed", true, driver);
+			logextent.reportUIResultRobot("PASS", "order confirmed", false, driver);
 		else
 			logextent.reportUIResultRobot("FAIL", "order confirmed failed!!", true, driver);
 		

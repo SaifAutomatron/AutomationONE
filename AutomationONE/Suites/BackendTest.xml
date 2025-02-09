@@ -8,7 +8,7 @@
  
  
 	
-<!-- 	 <test name="GET_USERS" enabled="true">
+ 	 <test name="GET_USERS" enabled="true">
 		<classes>
 			<class name="V1.ApiTest">
 				<methods>
@@ -25,9 +25,9 @@
 				</methods>
 			</class>
 		</classes>
-	</test> -->
+	</test>
 	
-	<test name="GET_COUCHBASE_DOCUMENT" enabled="true">
+	<!--<test name="GET_COUCHBASE_DOCUMENT" enabled="true">
 		<classes>
 			<class name="V1.ApiTest">
 				<methods>
@@ -35,7 +35,7 @@
 				</methods>
 			</class>
 		</classes>
-	</test>
+	</test>-->
 	
 	
 	

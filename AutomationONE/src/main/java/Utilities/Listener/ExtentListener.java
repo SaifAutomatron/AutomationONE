@@ -36,210 +36,174 @@ import lombok.SneakyThrows;
  *
  */
 
-public class ExtentListener implements ITestListener,ISuiteListener {
+public class ExtentListener implements ITestListener, ISuiteListener {
 
 	ITestContext ITC;
 	ExtentReports extent;
 	ExtentTest test;
 	ExtentTest node;
 	ITestResult result;
-	public static int ssNumber;
 
-	private static final ThreadLocal<ExtentTest> LocalThread=new ThreadLocal<ExtentTest>();
+	private static final ThreadLocal<ExtentTest> LocalThread = new ThreadLocal<ExtentTest>();
 
-
-	public void logInfo(String message)
-	{
+	public void logInfo(String message) {
 		LocalThread.get().info(message);
 
 	}
 
-	public void logJsonInfo(String json)
-	{
-		LocalThread.get().info(MarkupHelper.createCodeBlock(json,CodeLanguage.JSON));
+	public void logJsonInfo(String json) {
+		LocalThread.get().info(MarkupHelper.createCodeBlock(json, CodeLanguage.JSON));
 	}
 
-	public void logXMLInfo(String xml)
-	{
-		LocalThread.get().info(MarkupHelper.createCodeBlock(xml,CodeLanguage.XML));
+	public void logXMLInfo(String xml) {
+		LocalThread.get().info(MarkupHelper.createCodeBlock(xml, CodeLanguage.XML));
 	}
-	public void logReportPass(String message)
-	{
+
+	public void logReportPass(String message) {
 		LocalThread.get().log(Status.PASS, message);
 	}
 
-	public void logReportFail(String message)
-	{
+	public void logReportFail(String message) {
 		LocalThread.get().log(Status.FAIL, message);
 	}
 
 	@SneakyThrows
-	public boolean reoprtResult(String status,String message,boolean ssFlag,WebDriver driver)
-	{
-		String dest="";
-		String screenshotPath="";
-		if(ssFlag) {
-			String sNumber=ssNumber+"";
-			TakesScreenshot ts=(TakesScreenshot)driver;
-			File source=ts.getScreenshotAs(OutputType.FILE);
-			dest=java.nio.file.Paths.get(ExtentReporterCls.reportFolderPath, "Screenshots",sNumber+".png").toString();
-			File destination=new File(dest);
+	public boolean reoprtResult(String status, String message, boolean ssFlag, WebDriver driver) {
+		String screenshotPath = "";
+		if (ssFlag) {
+			TakesScreenshot ts = (TakesScreenshot) driver;
+			File source = ts.getScreenshotAs(OutputType.FILE);
+			screenshotPath = java.nio.file.Paths
+					.get(ExtentReporterCls.reportFolderPath, "Screenshots", System.currentTimeMillis() + ".png")
+					.toString();
+			File destination = new File(screenshotPath);
 			FileUtils.copyFile(source, destination);
-			screenshotPath=".\\Screenshots\\"+ssNumber+".png";
 		}
-		if(status.equalsIgnoreCase("PASS"))
-		{
-			if(ssFlag)
-			{
-				LocalThread.get().log(Status.PASS, message,MediaEntityBuilder.createScreenCaptureFromPath(screenshotPath).build());
-			}
-			else {
+		if (status.equalsIgnoreCase("PASS")) {
+			if (ssFlag) {
+				LocalThread.get().log(Status.PASS, message,
+						MediaEntityBuilder.createScreenCaptureFromPath(screenshotPath).build());
+			} else {
 				LocalThread.get().log(Status.PASS, message);
 			}
-
-		}
-		else if(status.equalsIgnoreCase("FAIL"))
-		{
-			if(ssFlag)
-			{
-				LocalThread.get().log(Status.FAIL, message,MediaEntityBuilder.createScreenCaptureFromPath(screenshotPath).build());
-			}
-			else {
+		} else if (status.equalsIgnoreCase("FAIL")) {
+			if (ssFlag) {
+				LocalThread.get().log(Status.FAIL, message,
+						MediaEntityBuilder.createScreenCaptureFromPath(screenshotPath).build());
+			} else {
 				LocalThread.get().log(Status.FAIL, message);
 			}
-
-		}
-		else
-		{
-			if(ssFlag)
-			{
-				LocalThread.get().log(Status.INFO, message,MediaEntityBuilder.createScreenCaptureFromPath(screenshotPath).build());
-			}
-			else {
+		} else {
+			if (ssFlag) {
+				LocalThread.get().log(Status.INFO, message,
+						MediaEntityBuilder.createScreenCaptureFromPath(screenshotPath).build());
+			} else {
 				LocalThread.get().log(Status.INFO, message);
 			}
-
 		}
-
-
 		return true;
-
 	}
-	
-	
+
 	@SneakyThrows
-	public boolean reoprtResultRobot(String status,String message,boolean ssFlag,WebDriver driver)
-	{
-		String dest="";
-		if(ssFlag) {
-			String sNumber=ssNumber+"";
-			BufferedImage screencapture = new Robot().createScreenCapture((new Rectangle(Toolkit.getDefaultToolkit().getScreenSize())));
-			dest=java.nio.file.Paths.get(ExtentReporterCls.reportFolderPath, "Screenshots",sNumber+".png").toString();
+	public boolean reoprtResultRobot(String status, String message, boolean ssFlag, WebDriver driver) {
+		String dest = "";
+		if (ssFlag) {
+			BufferedImage screencapture = new Robot()
+					.createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
+			dest = java.nio.file.Paths
+					.get(ExtentReporterCls.reportFolderPath, "Screenshots", +System.currentTimeMillis() + ".png")
+					.toString();
 			File file = new File(dest);
-            ImageIO.write(screencapture, "png", file);
+			ImageIO.write(screencapture, "png", file);
 		}
-		if(status.equalsIgnoreCase("PASS"))
-		{
-			if(ssFlag)
-			{
-				LocalThread.get().log(Status.PASS, message,MediaEntityBuilder.createScreenCaptureFromPath(dest).build());
-			}
-			else {
+		if (status.equalsIgnoreCase("PASS")) {
+			if (ssFlag) {
+				LocalThread.get().log(Status.PASS, message,
+						MediaEntityBuilder.createScreenCaptureFromPath(dest).build());
+			} else {
 				LocalThread.get().log(Status.PASS, message);
 			}
-
-		}
-		else if(status.equalsIgnoreCase("FAIL"))
-		{
-			if(ssFlag)
-			{
-				LocalThread.get().log(Status.FAIL, message,MediaEntityBuilder.createScreenCaptureFromPath(dest).build());
-			}
-			else {
+		} else if (status.equalsIgnoreCase("FAIL")) {
+			if (ssFlag) {
+				LocalThread.get().log(Status.FAIL, message,
+						MediaEntityBuilder.createScreenCaptureFromPath(dest).build());
+			} else {
 				LocalThread.get().log(Status.FAIL, message);
 			}
-
-		}
-		else
-		{
-			if(ssFlag)
-			{
-				LocalThread.get().log(Status.INFO, message,MediaEntityBuilder.createScreenCaptureFromPath(dest).build());
-			}
-			else {
+		} else {
+			if (ssFlag) {
+				LocalThread.get().log(Status.INFO, message,
+						MediaEntityBuilder.createScreenCaptureFromPath(dest).build());
+			} else {
 				LocalThread.get().log(Status.INFO, message);
 			}
-
 		}
-
-
 		return true;
-
 	}
-
 
 	@Override
 	public void onStart(ISuite suite) {
-		extent=ExtentReporterCls.ReportGenerator(suite.getName());
+		extent = ExtentReporterCls.ReportGenerator(suite.getName());
 	}
 
 	@Override
 	public void onTestStart(ITestResult result) {
-		node=test.createNode(result.getMethod().getMethodName());
+		node = test.createNode(result.getMethod().getMethodName());
 		LocalThread.set(node);
 	}
+
 	@Override
 	public void onTestSuccess(ITestResult result) {
 		LocalThread.get().log(Status.PASS, "----------------TEST CASE PASSED----------------");
 	}
+
 	@Override
 	public void onTestFailure(ITestResult result) {
 		LocalThread.get().fail(result.getThrowable());
 	}
+
 	@Override
 	public void onTestSkipped(ITestResult result) {
 		LocalThread.get().skip(result.getThrowable());
 	}
+
 	@Override
 	public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
 
 	}
+
 	@Override
 	public void onTestFailedWithTimeout(ITestResult result) {
 
 	}
+
 	@Override
 	public void onStart(ITestContext context) {
-		test=extent.createTest(context.getName());
+		test = extent.createTest(context.getName());
 	}
+
 	@Override
 	public void onFinish(ITestContext context) {
 
 	}
 
-
 	@Override
 	public void onFinish(ISuite suite) {
 		extent.flush();
-		int failCount=0;
-		String status="Passed";
+		int failCount = 0;
+		String status = "Passed";
 		Map<String, ISuiteResult> suiteResults = suite.getResults();
-		for( ISuiteResult sr:suiteResults.values())
-		{
+		for (ISuiteResult sr : suiteResults.values()) {
 			ITestContext tc = sr.getTestContext();
-			if(tc.getFailedTests().getAllResults().size()>0)
+			if (tc.getFailedTests().getAllResults().size() > 0)
 				failCount++;
-			if(tc.getFailedConfigurations().getAllResults().size()>0)
+			if (tc.getFailedConfigurations().getAllResults().size() > 0)
 				failCount++;
 
-			if(failCount>0)
-				status="Failed";
+			if (failCount > 0)
+				status = "Failed";
 			SendMail.sendOutputMail(ExtentReporterCls.path, status);
 		}
 	}
-
-
-
-
 
 }

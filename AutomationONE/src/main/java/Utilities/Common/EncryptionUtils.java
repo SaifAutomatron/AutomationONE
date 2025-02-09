@@ -1,70 +1,77 @@
 package Utilities.Common;
 
-import java.security.spec.KeySpec;
-
-
 import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.DESedeKeySpec;
-import org.apache.commons.codec.binary.Base64;
-import lombok.SneakyThrows;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
+import java.util.Base64;
 
 public class EncryptionUtils {
 
-	private static final String UNICODE_FORMAT="UTF8";
-	public static final String ENCRYPTION_SCHEME="DESede";
-	private KeySpec keySpec;
-	private SecretKeyFactory secretKeyFactory;
-	private Cipher cipher;
-	byte[] arrayBytes;
-	private String myKey;
-	private String myScheme;
-	SecretKey key;
+	private static final String ALGORITHM = "AES";
+	private static final String TRANSFORMATION = "AES/CBC/PKCS5Padding";
 
-	@SneakyThrows
-	public
-	EncryptionUtils(){
-		myKey="AutomationAutomatron1234";
-		myScheme=ENCRYPTION_SCHEME;
-		arrayBytes=myKey.getBytes(UNICODE_FORMAT);
-		keySpec=new DESedeKeySpec(arrayBytes);
-		secretKeyFactory=SecretKeyFactory.getInstance(myScheme);
-		cipher=Cipher.getInstance(myScheme);
-		key=secretKeyFactory.generateSecret(keySpec);
+	private SecretKey secretKey;
+	private IvParameterSpec ivSpec;
+
+	// Constructor to generate a new key and IV
+	public EncryptionUtils() {
+		generateKey();
 	}
 
-	public String encrypt(String unEncryptedString)
-	{
-		String encryptedString=null;
-		try {
-			cipher.init(Cipher.ENCRYPT_MODE,key);
-			byte[] plainText=unEncryptedString.getBytes(UNICODE_FORMAT);
-			byte[] encryptedText=cipher.doFinal(plainText);
-			encryptedString=new String(Base64.encodeBase64(encryptedText));
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.err.println("Encryption Failed!!");
-		}
-
-		return encryptedString;
+	// Constructor to load an existing key and IV (for decryption)
+	public EncryptionUtils(String base64Key, String base64IV) {
+		this.secretKey = new SecretKeySpec(Base64.getDecoder().decode(base64Key), ALGORITHM);
+		this.ivSpec = new IvParameterSpec(Base64.getDecoder().decode(base64IV));
 	}
 
-	public String decrypt(String encryptedString)
-	{
-		String decrypytedString=null;
+	private void generateKey() {
 		try {
-			cipher.init(Cipher.DECRYPT_MODE,key);
-			byte[] encryptedText=Base64.decodeBase64(encryptedString);
-			byte[] plainText=cipher.doFinal(encryptedText);
-			decrypytedString=new String(plainText);
+			// Generate a secure AES key
+			KeyGenerator keyGenerator = KeyGenerator.getInstance(ALGORITHM);
+			keyGenerator.init(256); // Use AES-256
+			this.secretKey = keyGenerator.generateKey();
 
+			// Generate a secure random IV (Initialization Vector)
+			byte[] iv = new byte[16]; // AES block size is 16 bytes
+			SecureRandom secureRandom = new SecureRandom();
+			secureRandom.nextBytes(iv);
+			this.ivSpec = new IvParameterSpec(iv);
 		} catch (Exception e) {
-			e.printStackTrace();
-			System.err.println("Decryption Failed!!");
+			throw new RuntimeException("Error generating key", e);
 		}
+	}
 
-		return decrypytedString;
+	public String encrypt(String plainText) {
+		try {
+			Cipher cipher = Cipher.getInstance(TRANSFORMATION);
+			cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivSpec);
+			byte[] encryptedBytes = cipher.doFinal(plainText.getBytes(StandardCharsets.UTF_8));
+			return Base64.getEncoder().encodeToString(encryptedBytes);
+		} catch (Exception e) {
+			throw new RuntimeException("Encryption failed", e);
+		}
+	}
+
+	public String decrypt(String encryptedText) {
+		try {
+			Cipher cipher = Cipher.getInstance(TRANSFORMATION);
+			cipher.init(Cipher.DECRYPT_MODE, secretKey, ivSpec);
+			byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(encryptedText));
+			return new String(decryptedBytes, StandardCharsets.UTF_8);
+		} catch (Exception e) {
+			throw new RuntimeException("Decryption failed", e);
+		}
+	}
+
+	public String getSecretKey() {
+		return Base64.getEncoder().encodeToString(secretKey.getEncoded());
+	}
+
+	public String getIV() {
+		return Base64.getEncoder().encodeToString(ivSpec.getIV());
 	}
 }

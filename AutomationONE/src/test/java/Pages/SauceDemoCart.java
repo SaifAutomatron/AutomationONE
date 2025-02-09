@@ -40,6 +40,7 @@ public class SauceDemoCart {
 	@FindBy(xpath ="//div[@id='checkout_complete_container']/h2")
 	private WebElement orderConformText;
 	
+	
 	public boolean confirmOrder(String firstName,String LastName,String postalCode)
 	{
 		try {

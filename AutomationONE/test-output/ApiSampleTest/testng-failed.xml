@@ -4,15 +4,14 @@
   <listeners>
     <listener class-name="Utilities.Listener.ExtentListener"/>
   </listeners>
-  <test thread-count="5" name="Sauce_Demo_Order_Item(failed)">
+  <test thread-count="5" name="SAVE_USER(failed)">
     <classes>
-      <class name="V1.UiTest">
+      <class name="V1.ApiTest">
         <methods>
-          <include name="orderItem"/>
-          <include name="setupDriver"/>
           <include name="readConfig"/>
+          <include name="saveUser"/>
         </methods>
-      </class> <!-- V1.UiTest -->
+      </class> <!-- V1.ApiTest -->
     </classes>
-  </test> <!-- Sauce_Demo_Order_Item(failed) -->
+  </test> <!-- SAVE_USER(failed) -->
 </suite> <!-- Failed suite [ApiSampleTest] -->

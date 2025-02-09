@@ -27,6 +27,10 @@ public class SauceDemoInventory {
 
 	@FindBy(xpath = "//a[@class='shopping_cart_link']")
 	private WebElement shoppingCartBtn;
+	
+	@FindBy(xpath = "//div[@class='inventory_item_name']")
+	private WebElement inventoryItem;
+	
 
 
 	public boolean addItemToCart(String itemName)
