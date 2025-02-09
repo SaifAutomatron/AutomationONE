@@ -2,12 +2,13 @@
 
 => Overview
 
-AutomationONE is a versatile test automation framework designed for automating UI, API, and Mobile testing. The framework integrates robust utilities for handling data, interacting with databases, performing Unix commands, and generating detailed reports through **ExtentReports**. It is built using Java, Selenium WebDriver, TestNG, Appium, and various other libraries for different utilities.
+AutomationONE is a versatile test automation framework designed for automating UI, API, and Mobile testing. The framework integrates robust utilities for handling data, interacting with databases, performing Unix commands, and generating detailed reports through **ExtentReports**. It is built using Java, Selenium WebDriver, TestNG, Appium, Rest Assured, and various other libraries for different utilities.
 
 => Features
 
 - **UI Testing**: Automate browser-based testing using Selenium WebDriver.
 - **Mobile Testing**: Supports mobile application testing on both Android and iOS using Appium.
+- **API Testing**: Automate REST API testing using Rest Assured.
 - **Data Management**: Support for test data stored in both Excel and JSON formats.
 - **Database Interaction**: Execute SQL queries and retrieve Couchbase NoSQL data.
 - **Unix Utilities**: Connect to Unix servers to execute commands and transfer files.
@@ -46,7 +47,6 @@ AutomationONE/
 │   │   ├── UnixUtils.java
 │   └── UnixTest/
 │       └── LoginExtent.java
-├── UITest.xml
 ```
 
 => Prerequisites
@@ -57,8 +57,9 @@ AutomationONE/
 4. **TestNG** for managing test execution
 5. **ExtentReports** for report generation
 6. **Appium Java Client 8.x**
-7. **Couchbase** and **JDBC** drivers for database interaction
-8. **JSch** library for Unix command execution
+7. **Rest Assured 5.x** for API testing
+8. **Couchbase** and **JDBC** drivers for database interaction
+9. **JSch** library for Unix command execution
 
 => Setup Instructions
 
@@ -119,7 +120,10 @@ AutomationONE/
      - Performing touch actions like tapping, scrolling, and drag-and-drop.
      - Capturing screenshots and locking/unlocking devices.
 
-7. **Reporting**
+7. **API Testing**
+   - **Rest Assured**: Provides utilities for automating REST API testing, including request specification, validation, and response parsing.
+
+8. **Reporting**
    - **ExtentListener**: Integrates **ExtentReports** into the framework for generating detailed HTML reports with logs, screenshots, and structured JSON/XML outputs.
 
 => Customization
