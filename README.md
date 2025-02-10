@@ -1,18 +1,21 @@
-
 ==> AutomationONE Test Automation Framework
 
 => Overview
 
-AutomationONE is a versatile test automation framework designed for automating UI and API testing. The framework integrates robust utilities for handling data, interacting with databases, performing Unix commands, and generating detailed reports through **ExtentReports**. It is built using Java, Selenium WebDriver, TestNG, and various other libraries for different utilities.
+AutomationONE is a versatile test automation framework designed for automating UI, API, and Mobile testing. The framework integrates robust utilities for handling data, interacting with databases, performing Unix commands, and generating detailed reports through **ExtentReports**. It is built using Java, Selenium WebDriver, TestNG, Appium, Rest Assured, and various other libraries for different utilities.
 
 => Features
 
 - **UI Testing**: Automate browser-based testing using Selenium WebDriver.
+- **Mobile Testing**: Supports mobile application testing on both Android and iOS using Appium.
+- **API Testing**: Automate REST API testing using Rest Assured.
 - **Data Management**: Support for test data stored in both Excel and JSON formats.
 - **Database Interaction**: Execute SQL queries and retrieve Couchbase NoSQL data.
 - **Unix Utilities**: Connect to Unix servers to execute commands and transfer files.
 - **Detailed Reporting**: Generate beautiful HTML reports using ExtentReports with integrated screenshots and logs.
 - **Reusable Utilities**: Common utilities for encryption, email sending, and more.
+- **Appium Server Management**: Start and stop Appium server programmatically.
+- **Gestures and Actions**: Perform touch gestures like tapping, scrolling, and drag-and-drop for mobile apps.
 
 => Folder Structure
 
@@ -25,7 +28,8 @@ AutomationONE/
 │   │   ├── JavaUtilities.java
 │   │   ├── PathConst.java
 │   │   ├── SendMail.java
-│   │   └── WebElementUtils.java
+│   │   ├── WebElementUtils.java
+│   │   └── AppiumUtilities.java
 │   ├── Database/
 │   │   ├── CouchBase.java
 │   │   └── DataBase.java
@@ -43,18 +47,19 @@ AutomationONE/
 │   │   ├── UnixUtils.java
 │   └── UnixTest/
 │       └── LoginExtent.java
-├── UITest.xml
 ```
 
 => Prerequisites
 
-1. **Java 8 or higher**
+1. **Java 11 or higher**
 2. **Maven** for managing dependencies
-3. **Selenium WebDriver**
+3. **Selenium WebDriver 4.x**
 4. **TestNG** for managing test execution
 5. **ExtentReports** for report generation
-6. **Couchbase** and **JDBC** drivers for database interaction
-7. **JSch** library for Unix command execution
+6. **Appium Java Client 8.x**
+7. **Rest Assured 5.x** for API testing
+8. **Couchbase** and **JDBC** drivers for database interaction
+9. **JSch** library for Unix command execution
 
 => Setup Instructions
 
@@ -90,7 +95,7 @@ AutomationONE/
 
 => Key Components
 
- 1. **Utilities.Common**
+1. **Utilities.Common**
    - **EncryptionUtils**: Provides encryption and decryption functionality using the DESede algorithm.
    - **JavaUtilities**: Contains utility methods for handling Selenium WebDriver interactions, such as switching frames, handling alerts, and taking screenshots.
    - **SendMail**: Sends emails with test results or logs.
@@ -102,13 +107,23 @@ AutomationONE/
 3. **Utilities.Excel**
    - **EmailData, EnvironmentData, TestData**: Manage test data from Excel sheets, with the ability to retrieve specific data points for use during test execution.
 
- 4. **Utilities.Json**
+4. **Utilities.Json**
    - **TestDataJson**: Handles test data stored in JSON files, converting the data into a `HashMap` for easy access during tests.
 
- 5. **Utilities.Unix**
+5. **Utilities.Unix**
    - **UnixUtils**: Provides methods for connecting to Unix servers, executing commands, and transferring files using SSH and SFTP.
 
- 6. **Reporting**
+6. **Utilities.Appium**
+   - **AppiumUtilities**: Includes methods for:
+     - Starting and stopping the Appium server programmatically.
+     - Initializing Android and iOS drivers.
+     - Performing touch actions like tapping, scrolling, and drag-and-drop.
+     - Capturing screenshots and locking/unlocking devices.
+
+7. **API Testing**
+   - **Rest Assured**: Provides utilities for automating REST API testing, including request specification, validation, and response parsing.
+
+8. **Reporting**
    - **ExtentListener**: Integrates **ExtentReports** into the framework for generating detailed HTML reports with logs, screenshots, and structured JSON/XML outputs.
 
 => Customization
@@ -121,5 +136,6 @@ AutomationONE/
 If you'd like to contribute to this project, feel free to open an issue or submit a pull request.
 
 **Work in Progress**
-=>Full Appium integration with Browserstack utilities
-
+- Full integration of Appium with Browserstack utilities.
+- Enhanced API testing capabilities.
+- Addition of advanced mobile gestures.
