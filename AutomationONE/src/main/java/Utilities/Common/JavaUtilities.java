@@ -6,8 +6,6 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.Random;
-import java.util.stream.Collectors;
-
 import lombok.SneakyThrows;
 
 /**

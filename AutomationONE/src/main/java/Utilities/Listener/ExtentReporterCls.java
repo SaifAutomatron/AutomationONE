@@ -1,9 +1,7 @@
 package Utilities.Listener;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
-
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 
@@ -19,7 +17,6 @@ public class ExtentReporterCls {
 	
 	@SneakyThrows
 	public static ExtentReports ReportGenerator(String name) {
-		Date d=new Date();
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MMM-dd_HH_mm");
 		String ReportFolderName="Report";
 		reportFolderPath=java.nio.file.Paths.get(System.getProperty("user.dir"),"HtmlReports","Extent",ReportFolderName).toString();

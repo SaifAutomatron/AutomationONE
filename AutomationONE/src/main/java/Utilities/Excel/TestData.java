@@ -135,49 +135,49 @@ public class TestData {
     public int fGetColumnIndex(String strXLSX, String strSheetName, String strColumnName) throws Exception {
 		FileInputStream file=new FileInputStream(new File(strXLSX));
 
-		XSSFWorkbook workbook=new XSSFWorkbook(file);
+		try (XSSFWorkbook workbook = new XSSFWorkbook(file)) {
+			Sheet sheet = workbook.getSheet(strSheetName);
 
-		Sheet sheet = workbook.getSheet(strSheetName);
+			Row row = sheet.getRow(0);
 
-		Row row = sheet.getRow(0);
+			int iColCount=row.getLastCellNum();
+			int iCell=0;
+			int iIndex=-1;
+			String strTemp="";
 
-		int iColCount=row.getLastCellNum();
-		int iCell=0;
-		int iIndex=-1;
-		String strTemp="";
+			for (iCell= 0; iCell <iColCount; iCell++) {
 
-		for (iCell= 0; iCell <iColCount; iCell++) {
-
-			strTemp=sheet.getRow(0).getCell(iCell).getStringCellValue().trim();
+				strTemp=sheet.getRow(0).getCell(iCell).getStringCellValue().trim();
 
 
-			if(strColumnName.equals("HEADER_IND")||strColumnName.equals("HEADER")) {
-				if(strTemp.equals("HEADER")||strTemp.equals("HEADER_IND"))
-				{
-					iIndex=iCell;
-					break;
+				if(strColumnName.equals("HEADER_IND")||strColumnName.equals("HEADER")) {
+					if(strTemp.equals("HEADER")||strTemp.equals("HEADER_IND"))
+					{
+						iIndex=iCell;
+						break;
+					}
 				}
+				else {
+					if(strTemp.equals(strColumnName.trim()))
+					{
+						iIndex=iCell;
+						break;
+					}
+				}
+
+			}
+
+			workbook.close();
+			file.close();
+
+			if(iIndex!=-1)
+			{
+				return iIndex;
 			}
 			else {
-				if(strTemp.equals(strColumnName.trim()))
-				{
-					iIndex=iCell;
-					break;
-				}
+				System.out.println("Failed to find the Column Id for column "+strColumnName);
+				return -1;
 			}
-
-		}
-
-		workbook.close();
-		file.close();
-
-		if(iIndex!=-1)
-		{
-			return iIndex;
-		}
-		else {
-			System.out.println("Failed to find the Column Id for column "+strColumnName);
-			return -1;
 		}
 
 	}

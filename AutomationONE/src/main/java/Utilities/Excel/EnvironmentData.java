@@ -47,7 +47,6 @@ public class EnvironmentData {
         environmentDataMap.put("EMAILSHEET_NAME", prop.getProperty("emailSheet"));
         environmentDataMap.put("REFDATASHEET_NAME", prop.getProperty("refDataSheet"));
 
-        String versionCode = environmentDataMap.get("VERSION_CODE");
         environmentDataMap.put("JSONFILEPATH", rootPath+"/Data/InputData/"+environmentDataMap.get("VERSION_CODE")+"/JSON/");
         environmentDataMap.put("XMLFILEPATH", rootPath+"/Data/InputData/"+environmentDataMap.get("VERSION_CODE")+"/XML/");
     }

@@ -6,7 +6,6 @@ import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInC
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
-import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;

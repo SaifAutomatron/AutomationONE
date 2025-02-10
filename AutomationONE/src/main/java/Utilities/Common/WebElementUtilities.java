@@ -13,7 +13,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.io.FileHandler;
 import Utilities.Listener.ExtentListener;
 
-public class WebElementUtils extends ExtentListener {
+public class WebElementUtilities extends ExtentListener {
 
 	public void selectDropdownOption(WebElement selectele, int index) {
 		new Select(selectele).selectByIndex(index);

@@ -14,18 +14,12 @@ import java.util.Objects;
 
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellBase;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Color;
-import org.apache.poi.ss.usermodel.Comment;
 import org.apache.poi.ss.usermodel.FillPatternType;
-import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
-import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -154,7 +148,9 @@ public class DataBase {
 			if(rs!=null)
 			{
 				metadata = rs.getMetaData();
-				columns=new ArrayList<String>() {{
+				columns=new ArrayList<String>() {private static final long serialVersionUID = 1L;
+
+				{
 					for (int i = 1; i <= metadata.getColumnCount(); i++) {
 						add(metadata.getColumnLabel(i));
 					}

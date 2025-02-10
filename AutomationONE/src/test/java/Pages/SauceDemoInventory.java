@@ -5,14 +5,14 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-import Utilities.Common.WebElementUtils;
+import Utilities.Common.WebElementUtilities;
 import lombok.Getter;
 
 @Getter
 public class SauceDemoInventory {
 
 	WebDriver driver;
-	WebElementUtils wutil=new WebElementUtils();
+	WebElementUtilities wutil=new WebElementUtilities();
 
 	public  SauceDemoInventory(WebDriver driver){
 		this.driver =  driver;
