@@ -21,7 +21,7 @@ public class ExtentReporterCls {
 	public static ExtentReports ReportGenerator(String name) {
 		Date d=new Date();
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MMM-dd_HH_mm");
-		String ReportFolderName=sdf.format(d);
+		String ReportFolderName="Report";
 		reportFolderPath=java.nio.file.Paths.get(System.getProperty("user.dir"),"HtmlReports","Extent",ReportFolderName).toString();
 		path=java.nio.file.Paths.get(reportFolderPath, name+"_Report.html").toString();
 		ExtentSparkReporter esr=new ExtentSparkReporter(path);
