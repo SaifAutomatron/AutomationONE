@@ -1,126 +1,142 @@
 package Utilities.Common;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import lombok.SneakyThrows;
 
 /**
+ * Utility class for common Java functions.
  * 
  * @author Saif
- *
  */
 public class JavaUtilities {
-	/**
-	 * returns random integer number between 1-1000
-	 * @return int Randomnumber
-	 */
-	public static int getRandomNumber()
-	{
-		Random rd=new Random();
-		int randomnum=rd.nextInt(1000);
 
-		return randomnum;
+	/**
+	 * Returns a random integer between 1 and 1000 (inclusive).
+	 * 
+	 * @return int Random number.
+	 */
+	public static int getRandomNumber() {
+		return new Random().nextInt(1000) + 1; // Ensures range is 1-1000
 	}
 
 	/**
+	 * Fetches a value from the properties file based on the given key.
 	 * 
-	 * @param key
-	 * @return Returns value according to key from property file
-	 * @throws Exception
+	 * @param configKey The key to look up.
+	 * @return Value associated with the key.
+	 * @throws IOException If the file cannot be read.
 	 */
 	@SneakyThrows
-	public static String getConfig(String configkey)
-	{
-
-		Properties p=new Properties();
-		p.load(new FileInputStream(PathConst.PROPFILEPATH));
-		return p.getProperty(configkey);
-	}
-
-	/**
-	 * 
-	 * @param String dataFilePath,HashMap hmap
-	 * @param hMap
-	 * @return Document content as String after replacing templates with desired values
-	 */
-	@SneakyThrows
-	public static String replaceTemplatewithValues(String dataFilePath,HashMap<String, String> hMap)
-	{
-		String result="";
-		StringBuffer sb;
-		BufferedReader br=new BufferedReader(new FileReader(new File(dataFilePath)));
-		String s;
-		sb=new StringBuffer();
-
-		while((s=br.readLine())!=null) {
-			sb=sb.append(s);
-			sb=sb.append("\n");
-
+	public static String getConfig(String configKey) {
+		Properties properties = new Properties();
+		try (InputStream input = Files.newInputStream(Paths.get(PathConst.PROPFILEPATH))) {
+			properties.load(input);
 		}
-		result=sb.toString();
+		return properties.getProperty(configKey, "Key Not Found");
+	}
 
-		String[] kerArr=hMap.keySet().toArray(new String[hMap.size()]);
+	/**
+	 * Reads a template file and replaces placeholders with given values.
+	 * 
+	 * @param dataFilePath Path of the file to read.
+	 * @param replacements HashMap containing key-value pairs for replacements.
+	 * @return Modified content as String.
+	 * @throws IOException If an error occurs during file reading.
+	 */
+	public static String replaceTemplatewithValues(String dataFilePath, HashMap<String, String> replacements) {
+		StringBuilder content = new StringBuilder();
 
-		for(String k:kerArr)
-		{
-			if(result.contains(k))
-			{
-				result=result.replace("{{"+k+"}}", hMap.get(k));
+		// 1️⃣ Read file line by line to avoid loading entire content into memory
+		try (BufferedReader br = new BufferedReader(new FileReader(dataFilePath))) {
+			String line;
+			while ((line = br.readLine()) != null) {
+				content.append(line).append("\n");
+			}
+		} catch (IOException e) {
+			throw new RuntimeException("Error reading file: " + dataFilePath, e);
+		}
+
+		// 2️⃣ Use StringBuilder to replace placeholders efficiently
+		for (var entry : replacements.entrySet()) {
+			String placeholder = "{{" + entry.getKey() + "}}";
+			int index;
+
+			// Replace all occurrences of {{KEY}} in content
+			while ((index = content.indexOf(placeholder)) != -1) {
+				content.replace(index, index + placeholder.length(), entry.getValue());
 			}
 		}
-		br.close();
 
-		return result;
+		return content.toString();
 	}
 
+	/**
+	 * Creates a CSV file at the specified path.
+	 * 
+	 * @param fileName Name of the CSV file.
+	 * @param filePath Directory where the file will be saved.
+	 * @param data     Varargs data to be written.
+	 * @throws IOException If the file cannot be created.
+	 */
 	@SneakyThrows
-	public static void createCSV(String fileName,String filePath,String ...data)
-	{
-		StringBuilder stringBuilder=new StringBuilder();
-
-		int size=data.length;
-
-		for(int i=0;i<size;i++)
-		{
-			stringBuilder.append(data[i]);
-		}
-
-		try(FileWriter writer=new FileWriter(filePath+"/"+fileName+".csv"))
-		{
-           writer.write(stringBuilder.toString());
-           System.out.println("CSV file created sucessfully");
-		} catch (Exception e) {
-            System.err.println("CSV file creation failed !!!");
+	public static void createCSV(String fileName, String filePath, String... data) {
+		File csvFile = Paths.get(filePath, fileName + ".csv").toFile();
+		try (FileWriter writer = new FileWriter(csvFile)) {
+			writer.write(String.join(",", data));
+			System.out.println("CSV file created successfully: " + csvFile.getAbsolutePath());
+		} catch (IOException e) {
+			System.err.println("CSV file creation failed!");
 			e.printStackTrace();
 		}
 	}
-	
+
+	/**
+	 * Runs a system command and waits for a specific log text. Works on both
+	 * Windows & Linux/Mac.
+	 * 
+	 * @param command The command to execute.
+	 * @param logText The text to look for in the output.
+	 * @throws IOException          If an I/O error occurs.
+	 * @throws InterruptedException If the process is interrupted.
+	 */
 	@SneakyThrows
-	public static void runWindowsCommand(String command,String logText) {
-		
-		String path=System.getProperty("user.dir");
-		ProcessBuilder builder=new ProcessBuilder("cmd.exe","/c","cd \""+path+"\" && "+command);
+	public static void runCommand(String command, String logText) {
+		String os = System.getProperty("os.name").toLowerCase();
+		ProcessBuilder builder;
+
+		if (os.contains("win")) {
+			builder = new ProcessBuilder("cmd.exe", "/c", command);
+		} else {
+			builder = new ProcessBuilder("sh", "-c", command);
+		}
+
 		builder.redirectErrorStream(true);
-		Process p=builder.start();
-		BufferedReader r=new BufferedReader(new InputStreamReader(p.getInputStream()));
-		String line;
-		while(true) {
-			line=r.readLine();
-			if(line.contains(logText)) {
-				Thread.sleep(5000);
+		Process process = builder.start();
+
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+			String line;
+			boolean found = false;
+
+			while ((line = reader.readLine()) != null) {
 				System.out.println(line);
-				break;
+				if (line.contains(logText)) {
+					found = true;
+					break;
+				}
+			}
+
+			process.waitFor();
+
+			if (!found) {
+				System.err.println("Log text not found in output!");
 			}
 		}
-		
 	}
-
 }

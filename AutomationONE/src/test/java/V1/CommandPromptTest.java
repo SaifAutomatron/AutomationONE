@@ -9,7 +9,7 @@ public class CommandPromptTest {
 	@Test
 	public void runCMD(){
 		
-		JavaUtilities.runWindowsCommand("java -version", "1");
+		JavaUtilities.runCommand("java -version", "1");
 	}
 
 }
